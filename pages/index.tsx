@@ -1,10 +1,23 @@
-import { useAllUsers } from "hooks/use-all-users";
-import Image from "next/image";
+import { useAllUsers } from 'hooks/use-all-users';
+import React, { useCallback, useState } from 'react';
+import { User } from 'types/api';
+import { escapeRegExp } from 'utils/escape-regexp';
+import { UserTable } from './user-table';
 
 
 
 export default function Home() {
   const { users, isLoading, error } = useAllUsers();
+  const [search, setSearch] = useState('');
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  const filterBySearchInput = useCallback((user: User): boolean => {
+    const userInputRegex = escapeRegExp(search);
+    return userInputRegex.test(user.email) || userInputRegex.test(user.last_name); 
+  },[search])
 
   if (isLoading){
     return (<div>
@@ -18,50 +31,20 @@ export default function Home() {
     </div>);
   }
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>
-            Avatar
-          </th>
-          <th>
-            First name
-          </th>
-          <th>
-            Last name
-          </th>
-          <th>
-            Email
-          </th>
-          <th>
-            Action
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {users.map(({id, avatar, first_name, last_name, email})=>(
-          <tr key={id}>
-            <td>
-              <Image src={avatar} alt="" width="50" height="50"/>
-            </td>
-            <td>
-              {first_name}
-            </td>
-            <td>
-              {last_name}
-            </td>
-            <td>
-              {email}
-            </td>
-            <td>
-              Edit Details
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <main>
+      <label>
+        Search by last name or email: 
+        <input type="search" value={search} onChange={handleSearch} />
+      </label>
+      <UserTable users={users} filterFunction={filterBySearchInput} />
+    </main>
   )
 }
 
+
+export interface UserTableProps {
+  users: User[];
+  filterFunction: (user: User) => boolean;
+}
 
 
