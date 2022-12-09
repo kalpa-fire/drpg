@@ -9,7 +9,7 @@ export function useAllUsers(){
     const [ users, setUsers ] = useState<User[]>([]);
     const {
       data,
-      isFetching,
+      isLoading,
       error,
       hasNextPage,
       fetchNextPage
@@ -36,7 +36,7 @@ export function useAllUsers(){
   
     return { 
       users,
-      isFetching,
+      isLoading,
       error
     };
   }

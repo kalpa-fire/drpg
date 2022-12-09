@@ -4,13 +4,20 @@ import Image from "next/image";
 
 
 export default function Home() {
-  const { users, isFetching, error } = useAllUsers();
-  return (
-    isFetching ? 
-    <div>
+  const { users, isLoading, error } = useAllUsers();
+
+  if (isLoading){
+    return (<div>
       Loading...
-    </div> 
-    : 
+    </div>);
+  }
+
+  if (error){
+    return (<div>
+      An error has occurred, please try again later
+    </div>);
+  }
+  return (
     <table>
       <thead>
         <tr>
