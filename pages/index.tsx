@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { User } from 'types/api';
 import { escapeRegExp } from 'utils/escape-regexp';
 import { UserTable } from './user-table';
+import { Input, FormControl, FormLabel, FormHelperText } from '@chakra-ui/react';
 
 
 
@@ -17,7 +18,7 @@ export default function Home() {
   const filterBySearchInput = useCallback((user: User): boolean => {
     const userInputRegex = escapeRegExp(search);
     return userInputRegex.test(user.email) || userInputRegex.test(user.last_name); 
-  },[search])
+  }, [search])
 
   if (isLoading){
     return (<div>
@@ -32,10 +33,11 @@ export default function Home() {
   }
   return (
     <main>
-      <label>
-        Search by last name or email: 
-        <input type="search" value={search} onChange={handleSearch} />
-      </label>
+      <FormControl mb="2rem">
+        <FormLabel>Search: </FormLabel>
+        <Input type="search" value={search} onChange={handleSearch} />
+        <FormHelperText>Filter users by last name or email</FormHelperText>
+      </FormControl>
       <UserTable users={users} filterFunction={filterBySearchInput} />
     </main>
   )
