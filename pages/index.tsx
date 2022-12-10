@@ -5,8 +5,6 @@ import { escapeRegExp } from 'utils/escape-regexp';
 import { UserTable } from './user-table';
 import { Input, FormControl, FormLabel, FormHelperText } from '@chakra-ui/react';
 
-
-
 export default function Home() {
   const { users, isLoading, error } = useAllUsers();
   const [search, setSearch] = useState('');
@@ -43,10 +41,5 @@ export default function Home() {
   )
 }
 
-
-export interface UserTableProps {
-  users: User[];
-  filterFunction: (user: User) => boolean;
-}
 
 
