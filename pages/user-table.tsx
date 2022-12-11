@@ -29,7 +29,6 @@ export function UserTable({ users, filterFunction, updateUserFunction, onUpdateU
     }
     setSelectedUser(null);
     onUpdateUser();
-    onClose();
   }
   
   const handleEditButtonClick = (user: User) => {
@@ -82,7 +81,7 @@ export function UserTable({ users, filterFunction, updateUserFunction, onUpdateU
         ))}
       </tbody>
     </table>
-    <EditUserModal isOpen={isOpen} onClose={onClose} handleSubmit={handleSubmit} selectedUser={selectedUser} />
+    {selectedUser && <EditUserModal isOpen={isOpen} onClose={onClose} handleSubmit={handleSubmit} selectedUser={selectedUser} />}
   </>
   );
 }
