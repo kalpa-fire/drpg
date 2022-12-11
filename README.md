@@ -1,29 +1,5 @@
-# Next.js + Jest
+# DRPG Test
 
-This example shows how to configure Jest to work with Next.js.
+This is my response to the DRPG coding challenge. I have ignored pagination to implement the search functionality as discussed over email with Paul. 
 
-This includes Next.js' built-in support for Global CSS, CSS Modules and TypeScript.
-
-## How to Use
-
-Quickly get started using [Create Next App](https://github.com/vercel/next.js/tree/canary/packages/create-next-app#readme)!
-
-In your terminal, run the following command:
-
-```bash
-npx create-next-app --example with-jest with-jest-app
-```
-
-```bash
-yarn create next-app --example with-jest with-jest-app
-```
-
-```bash
-pnpm create next-app --example with-jest with-jest-app
-```
-
-## Run Jest Tests
-
-```bash
-npm test
-```
+To run the app, install the dependencies with `npm install` and run the `npm run dev` command. The app will run on port 3000.
