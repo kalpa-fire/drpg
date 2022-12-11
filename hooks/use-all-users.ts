@@ -12,6 +12,7 @@ export function useAllUsers(){
       isLoading,
       error,
       hasNextPage,
+      refetch,
       fetchNextPage
     } = useInfiniteQuery<PaginatedData>(
       'my-paginated-data',
@@ -37,6 +38,7 @@ export function useAllUsers(){
     return { 
       users,
       isLoading,
-      error
+      error,
+      refetch
     };
   }

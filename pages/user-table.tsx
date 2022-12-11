@@ -1,47 +1,34 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { Button, useDisclosure } from '@chakra-ui/react';
-import { User } from 'types/api';
-import { useMutation } from 'react-query';
+import { EditUserParams, User } from 'types/api';
+import { UseMutateFunction, useMutation } from 'react-query';
 import { EditUserModal } from './edit-user-modal';
 
 
 interface UserTableProps {
   users: User[];
   filterFunction: (user: User) => boolean;
-}
-
-type EditUserParams = {
-  id: number;
-  data: Omit<User, 'avatar' | 'id'>;
+  updateUserFunction: UseMutateFunction<Response, unknown, EditUserParams>;
+  onUpdateUser: () => void;
 }
 
 
-export function UserTable({ users, filterFunction }: UserTableProps) {
+
+
+export function UserTable({ users, filterFunction, updateUserFunction, onUpdateUser }: UserTableProps) {
   const [ selectedUser, setSelectedUser ] = useState<User|null>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { mutate: updateUser } = useMutation(({ data, id }: EditUserParams) => fetch(`https://reqres.in/api/users/${id}`, 
-  {
-    method: 'PUT',
-    body: JSON.stringify(data),
-  }))
-
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const { first_name, last_name, email } = e.currentTarget;
-    const data: EditUserParams['data'] = {
-      email: email.value,
-      first_name: first_name.value,
-      last_name: last_name.value
-    }
+  const handleSubmit = (data: EditUserParams['data']) => { 
     if (selectedUser){
-      updateUser({
+      updateUserFunction({
         data,
         id: selectedUser?.id
       })
     }
+    setSelectedUser(null);
+    onUpdateUser();
     onClose();
   }
   

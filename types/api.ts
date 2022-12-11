@@ -17,3 +17,8 @@ export type PaginatedData = {
     text: string;
   }
 }
+
+export type EditUserParams = {
+    id: number;
+    data: Omit<User, 'avatar' | 'id'>;
+  }

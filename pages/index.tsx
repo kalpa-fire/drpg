@@ -1,12 +1,19 @@
-import { useAllUsers } from 'hooks/use-all-users';
+import { useAllUsers } from '../hooks/use-all-users';
 import React, { useCallback, useState } from 'react';
-import { User } from 'types/api';
-import { escapeRegExp } from 'utils/escape-regexp';
+import { EditUserParams, User } from '../types/api';
+import { escapeRegExp } from '../utils/escape-regexp';
 import { UserTable } from './user-table';
 import { Input, FormControl, FormLabel, FormHelperText } from '@chakra-ui/react';
+import { useMutation } from 'react-query';
 
 export default function Home() {
-  const { users, isLoading, error } = useAllUsers();
+  const { users, isLoading, error, refetch } = useAllUsers();
+
+  const { mutate: updateUser } = useMutation(({ data, id }: EditUserParams) => fetch(`https://reqres.in/api/users/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  }));
+
   const [search, setSearch] = useState('');
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,7 +23,11 @@ export default function Home() {
   const filterBySearchInput = useCallback((user: User): boolean => {
     const userInputRegex = escapeRegExp(search);
     return userInputRegex.test(user.email) || userInputRegex.test(user.last_name); 
-  }, [search])
+  }, [search]);
+
+  const onUpdateUser = () => {
+    refetch();
+  }
 
   if (isLoading){
     return (<div>
@@ -36,7 +47,7 @@ export default function Home() {
         <Input type="search" value={search} onChange={handleSearch} />
         <FormHelperText>Filter users by last name or email</FormHelperText>
       </FormControl>
-      <UserTable users={users} filterFunction={filterBySearchInput} />
+      <UserTable users={users} filterFunction={filterBySearchInput} updateUserFunction={updateUser} onUpdateUser={onUpdateUser} />
     </main>
   )
 }
